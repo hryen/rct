@@ -35,6 +35,7 @@ func init() {
 }
 
 // TODO 可指定文件保存的目录
+// TODO hosts.txt文件中的密码使用加密的方式
 // TODO 可指定日志保存的文件
 func main() {
 	flag.Parse()
