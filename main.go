@@ -74,8 +74,8 @@ func main() {
 		if "" == password {
 			password = defaultPassword
 		}
-		commandFile := hostItemArr[4]
 
+		commandFile := hostItemArr[4]
 		commands, err := readFile(commandFile)
 		if err != nil {
 			log.Print("Host "+host+" Error: Load commands error:", err)
