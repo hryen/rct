@@ -16,12 +16,22 @@ import (
 var hostsFile, defaultPort, defaultUsername, defaultPassword string
 var showVersion bool
 
+var (
+	InfoLogger  *log.Logger
+	ErrorLogger *log.Logger
+)
+
 func init() {
 	flag.StringVar(&hostsFile, "h", "", "hosts file")
 	flag.StringVar(&defaultPort, "P", "22", "default port, if not specified in the hosts file")
 	flag.StringVar(&defaultUsername, "u", "", "default username, if not specified in the hosts file")
 	flag.StringVar(&defaultPassword, "p", "", "default password, if not specified in the hosts file")
 	flag.BoolVar(&showVersion, "v", false, "output version information and exit")
+
+	// 日志
+	flags := log.Ldate | log.Lmicroseconds
+	InfoLogger = log.New(os.Stdout, "INFO: ", flags)
+	ErrorLogger = log.New(os.Stderr, "ERROR: ", flags)
 }
 
 // TODO -f 保存文件的路径用参数指定
@@ -44,7 +54,7 @@ func main() {
 	hosts, err := readFile(hostsFile)
 	if err != nil {
 		fmt.Print("Load hosts error:", err)
-		return
+		os.Exit(1)
 	}
 
 	defer timeCost(time.Now())
@@ -78,7 +88,7 @@ func main() {
 		commandFile := hostItemArr[4]
 		commands, err := readFile(commandFile)
 		if err != nil {
-			log.Print("Host "+host+" Error: Load commands error:", err)
+			ErrorLogger.Print("Host "+host+" Error: Load commands error:", err)
 			continue
 		}
 
@@ -92,7 +102,7 @@ func main() {
 	}
 	wg.Wait()
 
-	log.Printf("Host total: %d", hostCount)
+	InfoLogger.Printf("Host total: %d", hostCount)
 }
 
 func readFile(file string) ([]string, error) {
@@ -110,15 +120,16 @@ func readFile(file string) ([]string, error) {
 func RunCommandWriteFile(filename, host, port, username, password string, commands []string) {
 	out, err := RunCommand(host, port, username, password, commands)
 	if err != nil {
-		log.Print("Host "+host+" Error: ", err)
+		ErrorLogger.Print("Host "+host+" Error: ", err)
 		return
 	}
 
 	err = ioutil.WriteFile(filename, out, 0644)
 	if err != nil {
-		log.Print("Host "+host+" Error: write file error: ", err)
+		ErrorLogger.Print("Host "+host+" Error: write file error: ", err)
+		return
 	}
-	log.Print("Host " + host + " Done")
+	InfoLogger.Print("Host " + host + " Done")
 }
 
 func RunCommand(host, port, username, password string, commands []string) ([]byte, error) {
@@ -196,5 +207,5 @@ func RunCommand(host, port, username, password string, commands []string) ([]byt
 
 func timeCost(start time.Time) {
 	tc := time.Since(start)
-	log.Printf("Time consuming: %v\n", tc)
+	InfoLogger.Printf("Time consuming: %v\n", tc)
 }
