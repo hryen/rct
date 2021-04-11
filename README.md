@@ -1,2 +1,2 @@
 # rct
-A SSH Run Command(s) Tool
+A Run Command(s) Tool via SSH
