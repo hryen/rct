@@ -90,7 +90,7 @@ func main() {
 		wg.Add(1)
 		go func(host string, wg *sync.WaitGroup) {
 			defer wg.Done()
-			RunCommandsAndWriteFile(host+".txt", host, port, username, password, commands)
+			RunCommandWriteFile(host+".txt", host, port, username, password, commands)
 		}(host, &wg)
 		hostCount++
 	}
@@ -112,8 +112,8 @@ func loadHostItems(file string) ([]string, error) {
 	return hosts, nil
 }
 
-func RunCommandsAndWriteFile(filename, host, port, username, password string, commands []string) {
-	out, err := RunCommands(host, port, username, password, commands)
+func RunCommandWriteFile(filename, host, port, username, password string, commands []string) {
+	out, err := RunCommand(host, port, username, password, commands)
 	if err != nil {
 		log.Print("Host "+host+" Error: ", err)
 		return
@@ -126,7 +126,7 @@ func RunCommandsAndWriteFile(filename, host, port, username, password string, co
 	log.Print("Host " + host + " Done")
 }
 
-func RunCommands(host, port, username, password string, commands []string) ([]byte, error) {
+func RunCommand(host, port, username, password string, commands []string) ([]byte, error) {
 	var kexAlgos = []string{
 		"curve25519-sha256@libssh.org",
 		"ecdh-sha2-nistp256",
