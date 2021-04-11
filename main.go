@@ -32,8 +32,8 @@ func init() {
 
 	// 日志
 	flags := log.Ldate | log.Lmicroseconds
-	InfoLogger = log.New(os.Stdout, "INFO: ", flags)
-	ErrorLogger = log.New(os.Stderr, "ERROR: ", flags)
+	InfoLogger = log.New(os.Stdout, "INFO  ", flags)
+	ErrorLogger = log.New(os.Stderr, "ERROR ", flags)
 }
 
 // TODO 可指定文件保存的目录
@@ -43,7 +43,7 @@ func main() {
 	flag.Parse()
 
 	if showVersion {
-		fmt.Print("rct Version 0.0.1")
+		fmt.Println("rct version 0.0.1")
 		os.Exit(0)
 	}
 
