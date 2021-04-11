@@ -25,19 +25,8 @@ func init() {
 }
 
 // TODO -f 保存文件的路径用参数指定
-// TODO -c 执行的命令用参数指定
 // TODO -l 可指定将程序日志保存到文件中
 func main() {
-	commands := []string{
-		"screen-length 0 temporary",
-		"display version",
-		"whoami",
-		"ps -aux",
-		"display current-configuration",
-		"quit",
-		"exit",
-	}
-
 	flag.Parse()
 
 	if showVersion {
@@ -52,7 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	hosts, err := loadHostItems(hostsFile)
+	hosts, err := readFile(hostsFile)
 	if err != nil {
 		fmt.Print("Load hosts error:", err)
 		return
@@ -70,7 +59,7 @@ func main() {
 		if strings.TrimSpace(hostItem) == "" {
 			continue
 		}
-		// 读取 host, port, username, password
+		// 读取 host, port, username, password, commandFile
 		hostItemArr := strings.Split(hostItem, ",")
 		host := hostItemArr[0]
 		port := hostItemArr[1]
@@ -84,6 +73,13 @@ func main() {
 		password := hostItemArr[3]
 		if "" == password {
 			password = defaultPassword
+		}
+		commandFile := hostItemArr[4]
+
+		commands, err := readFile(commandFile)
+		if err != nil {
+			log.Print("Host "+host+" Error: Load commands error:", err)
+			continue
 		}
 
 		// 执行命令然后把回显的内容保存到文件
@@ -99,7 +95,7 @@ func main() {
 	log.Printf("Host total: %d", hostCount)
 }
 
-func loadHostItems(file string) ([]string, error) {
+func readFile(file string) ([]string, error) {
 	bs, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -107,9 +103,8 @@ func loadHostItems(file string) ([]string, error) {
 
 	content := string(bs)
 	content = strings.ReplaceAll(content, "\r\n", "\n")
-	hosts := strings.Split(content, "\n")
 
-	return hosts, nil
+	return strings.Split(content, "\n"), nil
 }
 
 func RunCommandWriteFile(filename, host, port, username, password string, commands []string) {
