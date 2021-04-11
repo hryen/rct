@@ -56,7 +56,7 @@ func main() {
 
 	hosts, err := readFile(hostsFile)
 	if err != nil {
-		fmt.Print("Load hosts error:", err)
+		fmt.Println("Load hosts error:", err)
 		os.Exit(1)
 	}
 
