@@ -34,8 +34,8 @@ func init() {
 	ErrorLogger = log.New(os.Stderr, "ERROR: ", flags)
 }
 
-// TODO -f 保存文件的路径用参数指定
-// TODO -l 可指定将程序日志保存到文件中
+// TODO 可指定文件保存的目录
+// TODO 可指定日志保存的文件
 func main() {
 	flag.Parse()
 
