@@ -1,3 +1,3 @@
 #host,port,username,password,commandFile
-192.168.174.21,,,,huawei-sw-backup.txt
-192.168.6.1,,,,linux-test.txt
+192.168.174.21,,,,commands/huawei-sw-backup.txt
+192.168.6.1,,,,commands/linux-test.txt
