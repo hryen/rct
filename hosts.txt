@@ -1,4 +1,3 @@
-#host,port,username,password
-192.168.174.21,,,
-192.168.174.22,22,root,password
-192.168.174.23,,,
+#host,port,username,password,commands file name
+192.168.174.21,,,,huawei-sw-backup.txt
+192.168.6.1,,,,linux-test.txt
