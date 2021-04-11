@@ -21,6 +21,8 @@ var (
 	ErrorLogger *log.Logger
 )
 
+var savePath = "files"
+
 func init() {
 	flag.StringVar(&hostsFile, "h", "", "hosts file")
 	flag.StringVar(&defaultPort, "P", "22", "default port, if not specified in the hosts file")
@@ -56,6 +58,15 @@ func main() {
 	if err != nil {
 		fmt.Print("Load hosts error:", err)
 		os.Exit(1)
+	}
+
+	_, err = os.Stat(savePath)
+	if os.IsNotExist(err) {
+		err = os.Mkdir(savePath, 0755)
+		if err != nil {
+			ErrorLogger.Print("Create directory error: ", err)
+			os.Exit(1)
+		}
 	}
 
 	defer timeCost(time.Now())
@@ -97,7 +108,7 @@ func main() {
 		wg.Add(1)
 		go func(host string, wg *sync.WaitGroup) {
 			defer wg.Done()
-			RunCommandWriteFile(host+".txt", host, port, username, password, commands)
+			RunCommandWriteFile(savePath+"/"+host+".txt", host, port, username, password, commands)
 		}(host, &wg)
 		hostCount++
 	}
