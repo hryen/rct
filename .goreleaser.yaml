@@ -26,8 +26,8 @@ archives:
       darwin: macOS
     files:
       - src: 'commands/*'
-        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}/commands'
+        dst: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
       - src: 'hosts.txt'
-        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}'
-      - src: 'rct*'
-        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}'
+        dst: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+      - src: 'rct(\.exe)?'
+        dst: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
