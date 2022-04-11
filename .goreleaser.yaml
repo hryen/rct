@@ -22,6 +22,12 @@ archives:
       - goos: windows
         format: zip
     name_template: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+    replacements:
+      darwin: macOS
     files:
-      - commands/*
-      - hosts.txt
+      - src: 'commands/*'
+        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}/commands'
+      - src: 'hosts.txt'
+        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}'
+      - src: 'rct*'
+        dst: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}'
